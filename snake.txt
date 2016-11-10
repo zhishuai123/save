@@ -1,0 +1,157 @@
+#include "stdafx.h"
+#include "stdlib.h"
+#include<time.h>
+#include<iostream>
+#include<vector>
+#include<conio.h>
+#include<Windows.h>
+#include<process.h>
+using namespace std;
+void out(int X, int Y, int M, int N);
+void __cdecl ThreadProc(void * pParam);
+void gotoxy(int x, int y);
+vector<int> ax, ay;
+int x = 0, y = 0, z = 0, dx, dy;
+char s = 'd', q;
+int main()
+{
+	ax.push_back(0);
+	ay.push_back(0);
+	ax.push_back(0);
+	ay.push_back(0);
+	ax.push_back(0);
+	ay.push_back(0);
+	srand((unsigned)time(NULL));
+	dy = rand()/2000;
+	dx = rand()/2000;
+	while (1)
+	{
+		if (dx <= 30 && dy <= 20)
+			break;
+	}
+	gotoxy(dx, dy);
+	cout << 'o';
+	_beginthread(ThreadProc, 0, 0);
+	while (1)
+	{
+		q = getch();
+		if (islower(q))
+			s = q;
+	}
+	return 0;
+}
+void __cdecl ThreadProc(void * pParam)
+{
+	while (1)
+	{
+		Sleep(250);
+		if (ax[z] == dx&& ay[z] == dy)
+		{
+			srand((unsigned)time(NULL));
+			ax.push_back(0);
+			ay.push_back(0);
+			rand();
+			dx = rand() / 2000;
+			dy = rand() / 2000;
+			while (1)
+			{
+				if (dx <= 30 && dy <= 20)
+					break;
+			}
+			for (int b = 0; b < ax.end() - ax.begin() - 1; b++)
+			{
+				if (ax[b + 1] == dx&&ay[b + 1] == dy)
+				{
+					dx = rand() / 2000;
+					dy = rand() / 2000;
+					break;
+				}
+			}
+			gotoxy(dx, dy);
+			cout << 'o';
+		}
+		switch (s)
+		{
+		case 'w':
+			for (int b = 0; b < ax.end() - ax.begin() - 1; b++)
+			{
+				ax[b] = ax[b + 1];
+				ay[b] = ay[b + 1];
+				z = b + 1;
+			}
+			y--;
+			ax[z] = x;
+			ay[z] = y;
+			out(ax[z], ay[z], ax[0], ay[0]);
+			break;
+		case 'a':
+			for (int b = 0; b < ax.end() - ax.begin() - 1; b++)
+			{
+				ax[b] = ax[b + 1];
+				ay[b] = ay[b + 1];
+				z = b + 1;
+			}
+			x--;
+			ax[z] = x;
+			ay[z] = y;
+			out(ax[z], ay[z], ax[0], ay[0]);
+			break;
+		case 's':
+			for (int b = 0; b < ax.end() - ax.begin() - 1; b++)
+			{
+				ax[b] = ax[b + 1];
+				ay[b] = ay[b + 1];
+				z = b + 1;
+			}
+			y++;
+			ax[z] = x;
+			ay[z] = y;
+			out(ax[z], ay[z], ax[0], ay[0]);
+			break;
+		case 'd':
+			for (int b = 0; b < ax.end() - ax.begin() - 1; b++)
+			{
+				ax[b] = ax[b + 1];
+				ay[b] = ay[b + 1];
+				z = b + 1;
+			}
+			x++;
+			ax[z] = x;
+			ay[z] = y;
+			out(ax[z], ay[z], ax[0], ay[0]);
+			break;
+		case 0:
+			_endthread();
+			break;
+		default:
+			break;
+		}
+		for (int b = 0; b < ax.end() - ax.begin() - 2; b++)
+		{
+			if (ax[z] == ax[b + 1] && ay[z] == ay[b + 1])
+			{
+				s = 0;
+				system("cls");
+				cout << "Game over";
+				system("pause");
+			}
+		}
+	}
+}
+void gotoxy(int x, int y)
+{
+	int xx = 0x0b;
+	HANDLE hOutput;
+	COORD loc;
+	loc.X = x;
+	loc.Y = y;
+	hOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleCursorPosition(hOutput, loc);
+}
+void out(int X, int Y, int M, int N)
+{
+	gotoxy(X, Y);
+	std::cout << 0;
+	gotoxy(M, N);
+	std::cout << ' ';
+}

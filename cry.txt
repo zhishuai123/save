@@ -1,0 +1,41 @@
+Given a non-negative number represented as an array of digits, plus one to the number.
+
+The digits are stored such that the most significant digit is at the head of the list.
+
+
+class Solution {
+public:
+    vector<int> plusOne(vector<int>& digits) {
+        vector<int> q;
+       vector <int*>b;
+        int a=digits.end()-digits.begin()-1;
+        int a1=a,z=a;
+        digits[a]=digits[a]+1;
+        for(;a>0;a--)
+        {
+        if(digits[a]>=10)
+        {
+            digits[a-1]=digits[a-1]+digits[a]/10;
+            digits[a]=digits[a]-digits[a]/10*10;
+            if(digits[a]==10)
+            digits[a]=0;
+        }
+        }
+	
+	while (digits[0] >= 10)
+	{
+		z++;
+		digits.push_back(0);
+		digits[z] = digits[0] / 10;
+		digits[0] = digits[0] - digits[0] / 10 * 10;
+		for (auto &x : digits)
+			b.push_back(&x - 1);
+		b[0] = &digits[z];
+	}
+        for(auto &x:b)
+        q.push_back(*x);
+        if(a1==z)
+        q=digits;
+        return q;
+    }
+};

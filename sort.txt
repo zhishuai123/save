@@ -1,0 +1,26 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+int main()
+{
+	int a=1,b,t;
+	vector<int> y,x;
+	while (cin >> b)
+		y.push_back(b);
+	while (a < y.size())
+	{
+		b = 0;
+		while (a != b)
+			if (y[a - b] < y[a - b - 1])
+			{
+				t = y[a - b], y[a - b] = y[a - b - 1], y[a - b - 1] = t;
+				b++;
+			}
+			else
+				break;
+		a++;
+	}
+	for (auto &q : y)
+		cout << q << ' ';
+    return 0;
+}
