@@ -1,0 +1,23 @@
+#include<iostream>
+#include<sapi.h>
+int main()
+{
+	ISpVoice * pVoice = NULL;
+
+	if (FAILED(::CoInitialize(NULL)))
+		return FALSE;
+
+	HRESULT hr = CoCreateInstance(CLSID_SpVoice, NULL, CLSCTX_ALL, IID_ISpVoice, (void **)&pVoice);
+	if (SUCCEEDED(hr))
+	{
+		while(1)
+		hr = pVoice->Speak(L"hello world", 0, NULL);
+
+		pVoice->Release();
+		pVoice = NULL;
+	}
+
+	::CoUninitialize();
+
+    return 0;
+}
