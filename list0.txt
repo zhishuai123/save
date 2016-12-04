@@ -1,0 +1,201 @@
+#include"stdafx.h"                                      //.cpp
+#include"class.h"
+#include<iostream>
+#define Max 20
+int main()
+{
+	int listlength = 0, num = 0;
+	list *node1 =0,*node2=0;
+	list head("");
+	std::string a;
+	char ch;
+	std::cout << "请输入名字,最多" << Max << "个,输入单个0表示输入完成\n";
+	node2 = &head;
+	while (std::cin >> a&&a != "0")
+	{
+		node1 = node2;
+		node2 = new list(a);
+		node1->next(node2);
+		listlength++;
+	}
+	system("cls");
+	head.showlist();
+	while (1)
+	{
+		int n;
+		std::cin >> ch;
+		switch (ch)
+		{
+		case 'd':
+			std::cout << "输入要删除的姓名标号";
+			std::cin >> n;
+			head.del(n);
+			listlength--;
+			break;
+		case 'n':
+			std::cout << "输入要加入的名字";
+			std::cin >> a;
+			std::cout << "将这个名字放在几号";
+			std::cin >> n;
+			insert(new list(a), head.findnum(n-1));
+			listlength++;
+			break;
+		case 'c':
+			head.clean();
+			listlength = 0;
+			break;
+		case 's':
+			head.showlist();
+			break;
+		}
+	}
+
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+//*************class.h
+#include<string>
+class list {
+	std::string name;
+	list *hand;
+public:
+	list(std::string str= "", list *h = 0) { name = str, hand = h;}
+	void clean();
+	list* findnum(int n);
+	int findname(std::string str);
+	void next(list *a);
+	void del(int n);
+	void showlist();
+	void showlength();
+	friend void insert(list *lh, list *exlh);
+};
+
+
+
+
+          // ************************class.cpp
+#include"stdafx.h"
+#include"class.h"
+#include<iostream>
+#include<string>
+
+void insert(list * lh,list * exlh)
+{
+	lh->next(exlh->hand);
+	exlh->next(lh);
+}
+
+void list::del(int n)
+{
+	list *b = this,*t;
+	for (int a = 0; a < n; a++)
+	{
+		t = b;
+		b = b->hand;
+		if (b == 0)
+		{
+			std::cout << "wrong";
+			break;
+		}
+	}
+	if (b != 0)
+	{
+		t->next(b->hand);
+		delete(b);
+	}
+}
+
+void list::next(list *a)
+{
+	hand = a;
+}
+
+void list::clean()
+{
+	list *a=this->hand,*b;
+	while (a != 0)
+	{
+		b = a;
+		a = a->hand;
+		delete(b);
+	}
+	this->hand = 0;
+}
+
+int list::findname(std::string str)
+{
+	int n = 0;
+	list *b = this;
+	while (b != 0)
+	{
+		if (str == b->name)
+			break;
+		b = b->hand;
+		n++;
+	}
+	if (b == 0)
+	{
+		std::cout << "列表中没有这个名字";
+		return 0;
+	}
+	else
+		return n;
+}
+
+list* list::findnum(int n)
+{
+	list *b=this;
+	for (int a = 0; a < n; a++)
+	{
+		b = b->hand;
+		if (b == 0)
+		{
+			std::cout << "wrong";
+			break;
+		}
+	}
+	if (b != 0)
+		return b;
+	else
+		return 0;
+}
+
+void list::showlist()
+{
+	list * b=this->hand;
+	if (name != "")
+		std::cout << "wrong";
+	else
+	{
+		for(int a=1;b!=0;a++)
+		{
+			std::cout << a << ' ' << b->name << std::endl;
+			b = b->hand;
+		}
+	}
+}
+
+void list::showlength()
+{
+	list * zz = this->hand;
+	if (name != "")
+		std::cout << "wrong";
+	else
+	{
+		int a;
+		for (a = 0; zz != 0;a++)
+		{
+			zz = zz->hand;
+		}
+		std::cout << a;
+	}
+}
