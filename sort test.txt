@@ -1,0 +1,93 @@
+#include "stdafx.h"
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<time.h>
+void merge(int*, int, int, int*);
+void sort(int*, int, int, int, int*);
+void qsort(int*, int, int, int*);
+int main()
+{
+	int p;
+	std::vector<int> ori;
+	while (std::cin >> p)
+	ori.push_back(p);
+	int *q = (int*)malloc(4 * ori.size());
+	for (int i = 0; i < ori.size(); i++)
+		q[i] = ori[i];
+	int *x = (int*)malloc(4 * ori.size());
+	int start = clock();
+	merge(q, 0, ori.size()-1, x);
+	int end = clock();
+	std::cout << end - start<<std::endl;
+	for (int i = 0; i < ori.size(); i++)
+		q[i] = ori[i];
+	start = clock();
+	qsort(q, 0, ori.size(), x);
+	end = clock();
+	std::cout << end - start << std::endl;
+	start = clock();
+	std::sort(ori.begin(), ori.end());
+	end = clock();
+	std::cout << end - start << std::endl;
+	return 0;
+}
+void merge(int *ori, int start, int end, int *target)
+{
+	if (end - start > 1)
+	{
+		merge(ori, start, (end - start) / 2 + start, target);
+		merge(ori, (end - start) / 2 + 1 + start, end, target);
+	}
+	sort(ori, start, (end - start) / 2 + start, end, target);
+}
+void sort(int *ori, int start, int mid, int end, int *target)
+{
+	for (int i = start, n = start, j = mid + 1; n <= end; n++)
+	{
+		if (i <= mid&&j <= end)
+		{
+			if (ori[i] < ori[j])
+				target[n] = ori[i++];
+			else
+				target[n] = ori[j++];
+		}
+		else
+		{
+			if (i > mid)
+				target[n] = ori[j++];
+			else if (j > end)
+				target[n] = ori[i++];
+		}
+	}
+	for (int i = start; i <= end; i++)
+		ori[i] = target[i];
+}
+void qsort(int *ori, int begin, int end, int *temp)
+{
+	int x;
+	if (end - begin < 1000)
+	{
+		for (int i = begin + 1; i < end; i++)
+			for (int j = i; j >= 0; j--)
+				if (ori[i] < ori[j])
+				{
+					x = ori[i], ori[i] = ori[j], ori[j] = x;
+				}
+				else
+					break;
+		return;
+	}
+	int fro = begin, last = end - 1;
+	for (int i = begin + 1; i < end; i++)
+		if (ori[begin] > ori[i])
+			temp[fro++] = ori[i];
+		else
+			temp[last--] = ori[i];
+	temp[last] = ori[begin];
+	for (int i = begin; i < end; i++)
+		ori[i] = temp[i];
+	qsort(ori, begin, last, temp);
+	qsort(ori, fro + 1, end, temp);
+}
