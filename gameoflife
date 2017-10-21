@@ -1,0 +1,208 @@
+// gol.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include<iostream>
+#include<process.h>
+#include<Windows.h>
+#include<conio.h>
+int speed = 2;
+int life = 1;
+#define XX 510
+#define YY 1000
+#define dx 100
+#define dy 50
+int left = 1, right = dx, top = 1, down = dy;
+void gotoxy(int x, int y);
+void _cdecl Thread(void *pParam);
+int main()
+{
+	_beginthread(Thread, 0, 0);
+	int num = 0;
+	int count = 0;
+	char cell[YY][XX] = {0};
+	char cell_tem[YY][XX] = {0};
+	/*for (int y = 1; y < YY; y++)
+	{
+		for (int x = 1; x < XX; x++)
+		{
+			cell[y][x] = rand() % 10;
+		}
+	}*/
+	for (int y = 1; y < YY -1; y++)
+	{
+		for (int x = 1; x < XX -1; x++)
+		{
+			cell[y][x] = rand() % 2;
+		}
+	}
+	
+	while (1)
+	{
+		if (count % speed == 0)
+		{
+			system("cls");
+
+			for (int y = top; y < down; y++)
+			{
+				for (int x = left; x < right; x++)
+				{
+					if (cell[y][x] != 0)
+					{
+						gotoxy(2 * (x-left+1), y-top+1);
+						std::cout << "█";
+					}
+				}
+			}
+		}
+	//	Sleep(500);
+		count++;
+		for (int y = 1; y < YY-1; y++)
+		{
+			for (int x = 1; x < XX-1; x++)
+			{
+				num = 0;
+				if (cell[y + 1][x - 1] != 0)
+					num++;
+				if (cell[y + 1][x] != 0)
+					num++;
+				if (cell[y + 1][x + 1] != 0)
+					num++;
+				if (cell[y][x - 1] != 0)
+					num++;
+				if (cell[y][x + 1] != 0)
+					num++;
+				if (cell[y - 1][x - 1] != 0)
+					num++;
+				if (cell[y - 1][x] != 0)
+					num++;
+				if (cell[y - 1][x + 1] != 0)
+					num++;
+				if (num == 3)
+				{
+
+					/*if (cell_tem[y][x] != 0)
+						cell_tem[y][x]--;
+					else*/
+						cell_tem[y][x] = 1;
+				}
+				else if (num == 2)
+				{
+					cell_tem[y][x] = cell[y][x];
+					/*if (cell_tem[y][x] != 0)
+						cell_tem[y][x]--;*/
+				}
+				else
+					cell_tem[y][x] = 0;
+			}
+		}
+
+		/*for (int y = 1; y < YY; y++)
+		{
+			for (int x = 1; x < XX; x++)
+			{
+				if (cell_tem[y][x] == 2)
+				{
+					switch (rand() % 8)
+					{
+					case 0:
+						cell_tem[y - 1][x + 1] = life;
+						break;
+					case 1:
+						cell_tem[y - 1][x] = life;
+						break;
+					case 2:
+						cell_tem[y - 1][x - 1] = life;
+						break;
+					case 3:
+						cell_tem[y + 1][x + 1] = life;
+						break;
+					case 4:
+						cell_tem[y + 1][x + 1] = life;
+						break;
+					case 5:
+						cell_tem[y + 1][x + 1] = life;
+						break;
+					case 6:
+						cell_tem[y][x + 1] = life;
+						break;
+					case 7:
+						cell_tem[y][x - 1] = life;
+						break;
+					}
+				}
+
+			}
+		}
+		*/
+		for (int y = 1; y < YY; y++)
+		{
+			for (int x = 1; x < XX; x++)
+			{
+				cell[y][x] = cell_tem[y][x];
+			}
+		}
+
+	}
+	return 0;
+}
+
+void gotoxy(int x, int y)
+{
+	int xx = 0x0b;
+	HANDLE hOutput;
+	COORD loc;
+	loc.X = x;
+	loc.Y = y;
+	hOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleCursorPosition(hOutput, loc);
+}
+
+void _cdecl Thread(void *pParam)
+{
+	while (1)
+	{
+		switch (getch())
+		{
+		case '1':
+			speed = 1;
+			break;
+		case '2':
+			speed = 5;
+			break;
+		case '3':
+			speed = 25;
+			break;
+		case '4':
+			speed = 125;
+			break;
+		case '5':
+			speed = 625;
+			break;
+		case 'w':
+			down -= dy/4;
+			top -= dy/4;
+			if (top < 1)
+				top = 1,down=dy;
+			break;
+		case 'a':
+			left -= dx/4;
+			right -= dx/4;
+			if (left < 1)
+				left = 1, right = dx;
+			break;
+		case 's':
+			down += dy/4;
+			top += dy/4;
+			if (down >= YY-1)
+				top = YY-dy, down = YY-1;
+			break;
+		case 'd':
+			left += dx/4;
+			right += dx/4;
+			if (right >= XX-1)
+				left = XX - dx , right = XX - 1;
+			break;
+		}
+	}
+}
