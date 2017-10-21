@@ -1,0 +1,64 @@
+#include<stdio.h>
+#define INITIAL_YEAR 1900
+#define INITIAL_WOB 1							//1900年第一天是周一
+int isLeapYear(int year);
+void outputMouthCalendar(int mouth, int weekOfBegin, int Leapyear);       //1900年以前是错的  懒得写了
+int DayNum[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
+enum MOUTH
+{
+	m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12
+};
+enum WEEK
+{
+	Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
+};
+int main()
+{
+	int year=0;	
+	printf("please input a year\n");
+	scanf("%d", &year);
+	int differenceOfYear = year - INITIAL_YEAR > 0 ? year - INITIAL_YEAR :INITIAL_YEAR - year;
+
+	int numOfLeapYear1 = year / 4 - year / 100 + year / 400;
+	int numOfLeapYear2 = INITIAL_YEAR / 4 - INITIAL_YEAR / 100 + INITIAL_YEAR / 400;
+	int numOfLeapYear = (numOfLeapYear1 > numOfLeapYear2 ? numOfLeapYear1 - numOfLeapYear2 : numOfLeapYear2 - numOfLeapYear1);
+
+	int weekOfBegin = (INITIAL_WOB + differenceOfYear * 365 + numOfLeapYear) % 7;		//第一天是周几。
+	int Leapyear = isLeapYear(year);
+	printf("%d年\n", year);
+	int i = 0;
+	for (i = m1; i <= m12; i++)
+	{
+		printf("%2d月\n", i+1);
+		if (isLeapYear(year))
+			outputMouthCalendar(i, weekOfBegin - 1, Leapyear);
+		else
+			outputMouthCalendar(i, weekOfBegin, Leapyear);
+		weekOfBegin = (DayNum[i] + weekOfBegin) % 7;
+	}
+	return 0;
+}
+int isLeapYear(int year)
+{
+	return (year % 4 == 0) && (year % 100 != 0) || (year % 400 == 0);
+}
+void outputMouthCalendar(int mouth, int weekOfBegin, int Leapyear)
+{
+	if (mouth == m2 && Leapyear == 1)
+		DayNum[m2] = 29;
+	else
+		DayNum[m2] = 28;
+	int i = 0;
+	printf("日 一 二 三 四 五 六\n");
+	for (i = 0; i < weekOfBegin; i++)
+	{
+		printf("   ");
+	}
+	for (i = 0; i < DayNum[mouth]; i++)
+	{
+		printf("%2d ", i+1);
+		if ((i + weekOfBegin+1) % 7 == 0)
+			printf("\n");
+	}
+	printf("\n");
+}
