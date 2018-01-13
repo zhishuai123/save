@@ -1,0 +1,332 @@
+package java_test;
+import java.awt.*;
+import java.util.LinkedList;
+import java.util.concurrent.locks.*;
+import javax.swing.*;
+import java.awt.event.*;
+
+public class java_test{
+	public static SimpleFrame frame = new SimpleFrame();
+	public static Lock MyLock = new ReentrantLock();
+	public static void main(String[] args)
+	{
+		frame.setTitle("Hello,JAVA");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+		Map map = new Map();
+		map.run();
+		frame.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if(e.getButton() == MouseEvent.BUTTON1)
+				{
+					MyLock.lock();
+					map.add_bullet(map.myairplane.shoot(myVal.UP));
+					MyLock.unlock();
+				}
+			}
+		});
+		
+		frame.addMouseMotionListener(new MouseAdapter() {
+			 public void mouseMoved(MouseEvent e){
+			     MyLock.lock();
+				 map.myairplane.set_position(new Position(e.getX(),e.getY()));
+				 MyLock.unlock();
+			}
+			 public void mouseDragged(MouseEvent e){
+			     MyLock.lock();
+				 map.myairplane.set_position(new Position(e.getX(),e.getY()));
+				 MyLock.unlock();
+			}
+		});
+		
+	}
+}
+
+class myVal{
+	public static final int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;
+	public static final int BULLET_SPEED = 8, AIRPLANE_SPEED = 1;
+	public static final Size BACKGROUND_SIZE = new Size( 408, 574 );
+	public static final Size BULLET_SIZE =  new Size( 7, 15 );
+	public static final Size MYPLANE_SIZE =  new Size( 63, 78 );
+	public static final Size PLANE_SIZE =  new Size( 31, 22 );
+}
+
+class Position{
+	public int x;
+	public int y;
+	public Position(int aX,int aY)
+	{
+		x = aX;
+		y = aY;
+	}
+	public Position clone()
+	{
+		Position tem = new Position(x,y);
+		return tem;
+	}
+}
+
+class Size{
+	public int width;
+	public int height;
+	public Size(int aWidth,int aHeight)
+	{
+		width = aWidth;
+		height = aHeight;
+	}
+}
+
+class Bullet {
+	private	Position position;
+	private	int direction;
+	private	int speed;
+	private	Size size;
+
+	public Bullet(Position pos, int dir, int spe, Size siz) 
+	{
+		position = pos;
+		direction = dir;
+		speed = spe;
+		size = siz;
+	}
+	public void move() 
+	{
+		switch (direction)
+		{
+		case myVal.UP:
+			position.y -= speed;
+			break;
+		case myVal.DOWN:
+			position.y += speed;
+			break;
+		case myVal.LEFT:
+			position.x -= speed;
+			break;
+		case myVal.RIGHT:
+			position.x += speed;
+			break;
+		default:
+			break;
+		}
+	}
+	public Position get_position()
+	{
+		return position;
+	}
+	public int get_speed() 
+	{
+		return speed;
+	}
+	public int get_direction() 
+	{
+		return direction;
+	}
+	public Size get_size() 
+	{
+		return size;
+	}
+	public void set_position(Position pos) 
+	{
+		position = pos;
+	}
+	public void set_direction(int dir) 
+	{
+		direction = dir;
+	}
+	public void set_speed(int spe) 
+	{
+		speed = spe;
+	}
+	public void set_size(Size siz) 
+	{
+		size = siz;
+	}
+
+};
+
+class Airplane extends Bullet{
+	public Airplane(Position pos, int dir, int spe, Size siz)
+	{
+		super(pos,dir,spe,siz);
+	}
+	Bullet shoot(int shoot_dir)
+	{
+		Position tem = get_position().clone();
+		if (shoot_dir == myVal.UP)
+			tem.y -= (myVal.BULLET_SIZE.height + myVal.MYPLANE_SIZE.height) / 2+2;
+		else if(shoot_dir==myVal.DOWN)
+			tem.y += (myVal.BULLET_SIZE.height + myVal.PLANE_SIZE.height) / 2;
+		return new Bullet(tem, shoot_dir, myVal.BULLET_SPEED * 3, myVal.BULLET_SIZE);
+	}
+};
+
+
+class Map {
+
+	private static Position pos = new Position(0,0);
+	public static Airplane myairplane = new Airplane(pos, myVal.UP, myVal.AIRPLANE_SPEED, myVal.MYPLANE_SIZE);
+	public static LinkedList<Bullet> list_bullet= new LinkedList<Bullet>();
+	public static LinkedList<Airplane> list_airplane = new LinkedList<Airplane>();
+
+	public void check_collision()
+	{
+		boolean tem1, tem2,tem3=false;
+		for (int i = 0; i != list_airplane.size(); i++)
+		{
+			/*tem1 = 2 * Math.abs(list_airplane.get(i).get_position().x - myairplane.get_position().x) < myVal.MYPLANE_SIZE.width + myVal.PLANE_SIZE.width;
+			tem2 = 2 * Math.abs(list_airplane.get(i).get_position().y - myairplane.get_position().y) < myVal.MYPLANE_SIZE.height + myVal.PLANE_SIZE.height;
+			if (tem1&&tem2)
+			{
+				list_airplane.remove(i);
+			}*/
+			//游戏结束  开无敌了
+			for (int j = 0; j != list_bullet.size(); j++)
+			{
+	
+				tem1 = 2 * Math.abs(list_airplane.get(i).get_position().x - list_bullet.get(j).get_position().x) < myVal.BULLET_SIZE.width + myVal.PLANE_SIZE.width;
+				tem2 = 2 * Math.abs(list_airplane.get(i).get_position().y - list_bullet.get(j).get_position().y) < myVal.BULLET_SIZE.height + myVal.PLANE_SIZE.height;
+				tem3 = tem1&&tem2;
+				if (tem3)
+				{
+					list_airplane.remove(i);
+					list_bullet.remove(j);
+					break;
+				}
+			}
+			if (tem3)
+				break;
+		}
+		for (int i = 0; i != list_bullet.size(); i++)
+		{
+			tem1 = 2 * Math.abs(list_bullet.get(i).get_position().x - myairplane.get_position().x) < myVal.MYPLANE_SIZE.width + myVal.PLANE_SIZE.width;
+			tem2 = 2 * Math.abs(list_bullet.get(i).get_position().y - myairplane.get_position().y) < myVal.MYPLANE_SIZE.height + myVal.PLANE_SIZE.height;
+			if (tem1&&tem2)
+				;
+			//游戏结束
+		}
+		for (int i = 0; i != list_bullet.size(); i++)
+		{
+			if (list_bullet.get(i).get_position().y<0 )
+			{
+				list_bullet.remove(i);
+				break;
+			}
+		}
+		for (int i = 0; i != list_airplane.size(); i++)
+		{
+			if (list_airplane.get(i).get_position().y>myVal.BACKGROUND_SIZE.height)
+			{
+				list_airplane.remove(i);
+				break;
+			}
+		}
+	}
+	public void show() 
+	{
+		java_test.frame.repaint();
+	}
+	public void add_bullet(Bullet bul)
+	{
+		list_bullet.add(bul);
+	}
+	public void add_airplane(Airplane airp)
+	{
+		list_airplane.add(airp);
+	}
+	public Airplane get_myairplane()
+	{
+		return myairplane;
+	}
+	public void move_bullet()
+	{
+		for (Bullet a : list_bullet)
+			a.move();
+	}
+	public void move_plane()
+	{
+		for (Airplane a : list_airplane)
+			a.move();
+	}
+	public void run()
+	{
+		Runnable r1 = ()->{
+			while(true)
+			{
+				try {  
+				    Thread.sleep(50);
+				    java_test.MyLock.lock();
+				    move_plane();
+				    move_bullet();
+				    check_collision();
+				    java_test.MyLock.unlock();
+				}catch (InterruptedException e) {  
+				    return;
+				}
+			}
+		};
+		Runnable r2 = ()->{
+			while(true)
+			{
+				show();
+			}
+		};
+		Runnable r3 = ()->{
+			
+			while(true)
+			{
+				try {  
+				    Thread.sleep(500);
+				    java_test.MyLock.lock();
+				    Position tpos = new Position((int)(Math.random() * (myVal.BACKGROUND_SIZE.width - myVal.MYPLANE_SIZE.width)) + myVal.MYPLANE_SIZE.width,0 );
+					add_airplane(new Airplane(tpos, myVal.DOWN, myVal.BULLET_SPEED, myVal.PLANE_SIZE));
+				    java_test.MyLock.unlock();
+				}catch (InterruptedException e) {  
+				    return;
+				}
+			}
+		};
+		Thread t1 = new Thread(r1);
+		Thread t2 = new Thread(r2);
+		Thread t3 = new Thread(r3);
+		t1.start();
+		t2.start();
+		t3.start();
+	}
+};
+
+class SimpleFrame extends JFrame
+{
+	
+	public MyComponent com = new MyComponent();
+	public SimpleFrame()
+	{
+		setSize(myVal.BACKGROUND_SIZE.width, myVal.BACKGROUND_SIZE.height);
+		add(com);
+	}
+}
+
+class MyComponent extends JComponent
+{
+	private Image imgBg = new ImageIcon("image\\bg.jpg").getImage();
+	private Image imgMy = new ImageIcon("image\\my.jpg").getImage();
+	private Image imgE = new ImageIcon("image\\enermy.jpg").getImage();
+	private Image imgB = new ImageIcon("image\\bullet.jpg").getImage();
+
+	public void paintComponent(Graphics g)
+	{
+		java_test.MyLock.lock();
+		g.drawImage(imgBg, 0,0, myVal.BACKGROUND_SIZE.width, myVal.BACKGROUND_SIZE.height,null);
+		g.drawImage(imgMy, Map.myairplane.get_position().x - myVal.MYPLANE_SIZE.width / 2,Map.myairplane.get_position().y - myVal.MYPLANE_SIZE.height / 2 , myVal.MYPLANE_SIZE.width, myVal.MYPLANE_SIZE.height,null);
+		for(Airplane a:Map.list_airplane)
+		{
+			g.drawImage(imgE, a.get_position().x - a.get_size().width / 2,a.get_position().y - a.get_size().height / 2, myVal.PLANE_SIZE.width, myVal.PLANE_SIZE.height,null);
+		}
+		for(Bullet a:Map.list_bullet)
+		{
+			g.drawImage(imgB, a.get_position().x - a.get_size().width / 2,a.get_position().y - a.get_size().height / 2, myVal.BULLET_SIZE.width, myVal.BULLET_SIZE.height,null);
+		}
+		java_test.MyLock.unlock();
+		
+	}
+	public Dimension getPreferredSize() { return new Dimension(myVal.BACKGROUND_SIZE.width,  myVal.BACKGROUND_SIZE.height); }
+}
