@@ -1,0 +1,1158 @@
+// homework.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+/*#include<iostream>
+#include<sstream>
+using namespace std;
+int main()
+{
+	string sentence = "Hello!This is my homework.";
+	string word;
+	float wordsNum = 0, characterNum = 0;
+	
+	for (int i=0;i<sentence.size();i++)
+	{
+		if (!isalnum(sentence[i]))
+			sentence[i] =32;
+	}
+	istringstream sin(sentence);
+	while (sin >> word)
+	{
+		characterNum += word.size();
+		wordsNum++;
+	}
+	if (wordsNum == 0)
+	{
+		cout << "This string is null.";
+		return 0;
+	}
+	cout << characterNum / wordsNum;
+	return 0;
+}*/
+/*#include<iostream>
+#include<string>
+using namespace std;
+int main()
+{
+	string number = "2564759";
+	for (int i = 0; i < number.size(); i++)
+	{
+		if (number[i]<'0' || number[i]>'9')
+		{
+			cout << "error" << endl;
+			return 0;
+		}
+	}
+	cout << stoi(number) + 1;
+	return 0;
+}*/
+/*#include<iostream>
+#include<string>	
+using namespace std;
+int main()
+{
+	string firstName = "zhi";
+	string secondName = "shuai";
+	string password(6,' ');
+	cout << "enter your first name:" << endl;
+	cout << "enter your second name:" << endl;
+	if (firstName.size() == 0 || secondName.size() == 0)
+	{
+		cout << "This name is empty.";
+		return 0;
+	}
+	password[0] = firstName[0];
+	password[1] = firstName[firstName.size() / 2];
+	password[2] = firstName[firstName.size() - 1];
+	password[3] = secondName[0];
+	password[4] = secondName[secondName.size() / 2];
+	password[5] = secondName[secondName.size() - 1];
+	cout << "Your password is " << password << endl;
+	return 0;
+}*/
+/*#include<iostream>
+class elevator {
+private:
+	int floor;
+public:
+	elevator() :floor(1) {}
+	elevator & operator++();
+	elevator & operator--();
+	int showFloor();
+};
+int main()
+{
+	char c;
+	elevator my;
+	while (std::cin >> c)
+	{
+		switch (c)
+		{
+		case '-':
+			(--my).showFloor();
+			break;
+		case '+':
+			(++my).showFloor();
+			break;
+		case 's':
+		case 'S':
+			while ((--my).showFloor()>1);
+			return 0;
+			break;
+		}
+	}
+	return 0;
+}
+elevator & elevator::operator++()
+{
+	if (floor < 10)
+		floor++;
+	return *this;
+}
+elevator & elevator::operator--()
+{
+	if (floor > 1)
+		floor--;
+	return *this;
+}
+int elevator::showFloor()
+{
+	std::cout << floor << std::endl;
+	return floor;
+}
+/*
+#include<iostream>
+class rbt {
+private:
+	float x_c, y_c;
+public:
+	rbt(float x = 0, float y = 0) :x_c(x), y_c(y) {}
+	void display_position()
+	{
+		std::cout << "(" << x_c << "," << y_c << ")" << std::endl;
+	}
+	void l(float f);
+	void r(float f);
+	void f(float f);
+	void b(float f);
+	void g(float f1,float f2);
+	void r_t_b();
+};
+int main()
+{
+	rbt r2d2(10.0, 8.1);
+	r2d2.l(1.3);
+	r2d2.display_position();
+	r2d2.b(4.21);
+	r2d2.display_position();
+	r2d2.r(3.1);
+	r2d2.display_position();
+	r2d2.r_t_b();
+	r2d2.f(0.3);
+	r2d2.display_position();
+	r2d2.g(1.5, 4.5);
+	r2d2.r_t_b();
+	return 0;
+}
+
+void rbt::l(float f)
+{
+	x_c -= f;
+}
+
+void rbt::r(float f)
+{
+	x_c += f;
+}
+
+void rbt::f(float f)
+{
+	y_c -= f;
+}
+
+void rbt::b(float f)
+{
+	y_c += f;
+}
+
+void rbt::g(float x, float y)
+{
+	x_c = x, y_c = y;
+}
+
+void rbt::r_t_b()
+{
+	x_c = 0;
+	y_c= 0;
+}*/
+/*#include<iostream>
+class rbt {
+private:
+	float x_c, y_c;
+public:
+	rbt(float x = 0, float y = 0) :x_c(x), y_c(y) {}
+	void display_position()
+	{
+		std::cout << "(" << x_c << "," << y_c << ")" << std::endl;
+	}
+	void l(float f);
+	void r(float f);
+	void f(float f);
+	void b(float f);
+	void g(float f1, float f2);
+	void r_t_b();
+};
+int main()
+{
+	rbt r2d2(10.0, 8.1);
+	r2d2.l(1.3);
+	r2d2.display_position();
+	r2d2.b(4.21);
+	r2d2.display_position();
+	r2d2.r(3.1);
+	r2d2.display_position();
+	r2d2.r_t_b();
+	r2d2.f(0.3);
+	r2d2.display_position();
+	r2d2.g(1.5, 4.5);
+	r2d2.r_t_b();
+	return 0;
+}
+
+void rbt::l(float f)
+{
+	x_c -= f;
+}
+
+void rbt::r(float f)
+{
+	x_c += f;
+}
+
+void rbt::f(float f)
+{
+	y_c -= f;
+}
+
+void rbt::b(float f)
+{
+	y_c += f;
+}
+
+void rbt::g(float x, float y)
+{
+	x_c = x, y_c = y;
+}
+
+void rbt::r_t_b()
+{
+	x_c = 0;
+	y_c = 0;
+}*/
+/*#include<iostream>
+class rbt {
+private:
+	float x_c, y_c;
+	double X;
+	static const int upside = 0; 
+	static const int downside = 100;
+	static const int leftside = 0;
+	static const int rightside = 100;
+public:
+	rbt(float x = 0, float y = 0,float X=0) :x_c(x), y_c(y),X(X) {}
+	void display_position()
+	{
+		std::cout << "(" << x_c << "," << y_c << ")" << std::endl;
+	}
+	int l(float f);
+	int r(float f);
+	int f(float f);
+	int b(float f);
+
+	int g(float f1, float f2);
+	int r_t_b();
+
+	int speed_l(float speed, int second);
+	int speed_r(float speed, int second);
+	int speed_f(float speed, int second);
+	int speed_b(float speed, int second);
+
+};
+int main()
+{
+	rbt r2d2(10.0, 8.1);
+	std::cout<<r2d2.l(1.3)<<std::endl;
+	r2d2.display_position();
+	std::cout<<r2d2.b(500000)<<std::endl;
+	r2d2.display_position();
+	std::cout << r2d2.r(3.1) << std::endl;
+	r2d2.display_position();
+	std::cout<<r2d2.r_t_b()<<std::endl;
+	r2d2.display_position();
+	std::cout<<r2d2.f(0.3)<<std::endl;
+	r2d2.display_position();
+	std::cout<<r2d2.g(1.5, 4.5)<<std::endl;
+	r2d2.display_position();
+	std::cout<<r2d2.r_t_b()<<std::endl;
+	return 0;
+}
+
+int rbt::l(float f)
+{
+	double tem = X;
+	if ((tem -= 2*((x_c - 0.1 > f) ? f : x_c - 0.1) / 2000) < 0)
+		return 1;
+	X -= ((x_c - 0.1 > f) ? f : x_c - 0.1) / 2000;
+
+	x_c -= f;
+	if (x_c <= leftside)
+	{
+		x_c = 0.1;
+		return 2;
+	}
+	return 0;
+}
+
+int rbt::r(float f)
+{
+	double tem = X;
+	if ((tem -= 2*((99.9 - x_c > f) ? f : 99.9 - x_c) / 2000) < 0)
+		return 1;
+	X -= ((99.9 - x_c > f) ? f : 99.9 - x_c) / 2000;
+	x_c += f;
+	if (x_c >= rightside)
+	{
+		x_c = 99.9;
+		return 2;
+	}
+	return 0;
+}
+
+int rbt::f(float f)
+{
+	double tem = X;
+	if ((tem -= 2 * ((y_c - 0.1 > f) ? f : y_c - 0.1)) < 0)
+		return 1;
+
+	X -= ((y_c - 0.1 > f) ? f : y_c - 0.1) / 2000;
+	y_c -= f;
+	if (y_c <= upside)
+	{
+		y_c = 0.1;
+		return 2;
+	}
+	return 0;
+}
+
+int rbt::b(float f)
+{
+	double tem = X;
+	if ((tem -= (2 * ((99.9 - y_c > f) ? f : 99.9 - y_c) / 2000)) < 0)
+		return 1;
+	X -= ((99.9 - y_c > f) ? f : 99.9 - y_c) / 2000;
+	y_c += f;
+	if (y_c >= downside)
+	{
+		y_c = 99.9;
+		return 2;
+	}
+	return 0;
+}
+
+int rbt::g(float x, float y)
+{
+	int flag=0;
+	if (y >= downside)
+	{
+		y = 99.9;
+		flag = 1;
+	}
+	if (y <= upside)
+	{
+		y = 0.1;
+		flag = 1;
+	}
+	if (x >= rightside)
+	{
+		x = 99.9;
+		flag = 1;
+	}
+	if (x <= leftside)
+	{
+		x = 0.1;
+		flag = 1;
+	}
+
+	if (x > x_c&&r(x) == 2)
+		return 2;
+	else if (x < x_c&&l(x) == 2)
+		return 2;
+
+	if (y > y_c&&b(y) == 2)
+		return 2;
+	else if (y < y_c&&f(y) == 2)
+		return 2;
+	
+	return flag;
+}
+
+int rbt::r_t_b()
+{
+	int flag = 0;
+	if ((flag=l(x_c - 0.1)) == 2)
+		return 2;
+	if ((flag = f(9.9 - y_c)) == 2)
+		return 2;
+	return flag;
+}
+
+int rbt::speed_l(float speed, int second)
+{
+	return l(speed*second);
+}
+
+int rbt::speed_r(float speed, int second)
+{
+	return r(speed*second);
+}
+
+int rbt::speed_f(float speed, int second)
+{
+	return f(speed* second);
+}
+
+int rbt::speed_b(float speed, int second)
+{
+	return b(speed*second);
+}
+*/
+/*#include <iostream>
+#include<vector>
+using namespace std;
+class account {
+private:
+	int num;
+	int password;
+	double money;
+public:
+	account(int num, int password, double money = 0) :num(num), password(password), money(money) {}
+	//	bool change_password(int new_password);
+	void add(double m);
+	bool fetch(double m);
+	int get_num();
+	bool cmp_password(int p);
+	double show_money();
+};
+vector<account*> account_list;
+class ATM {
+private:
+	account* now_acc;
+public:
+	bool sign_in();
+	void add(double m);
+	bool fetch(double m);
+	int get_num();
+	double show_money();
+	void exit();
+};
+void account::add(double m)
+{
+	money += m;
+}
+bool account::fetch(double m)
+{
+	if (money - m<0)
+		return false;
+	money -= m;
+	return true;
+}
+int account::get_num()
+{
+	return num;
+}
+double account::show_money()
+{
+	return money;
+}
+bool account::cmp_password(int p)
+{
+	return password == p;
+}
+
+bool ATM::sign_in()
+{
+	int tem = 0;
+	cin >> tem;						//输入卡号
+	//tem = 123;
+	for (int i=0;i<account_list.size();i++)
+	{
+		if (account_list[i]->get_num() == tem)
+		{
+			cin >> tem;                 //输入密码
+			//tem = 456;
+			if (account_list[i]->cmp_password(tem))
+			{
+				now_acc = account_list[i];
+				return true;
+			}
+			else
+			{
+				cout << "密码错误"<<endl;
+				return false;
+			}
+		}
+	}
+	return false;
+}
+void ATM::add(double m)
+{
+	now_acc->add(m);
+}
+bool ATM::fetch(double m)
+{
+	return now_acc->fetch(m);
+}
+int ATM::get_num()
+{
+	return now_acc->get_num();
+}
+double ATM::show_money()
+{
+	return now_acc->show_money();
+}
+void ATM::exit()
+{
+	now_acc = NULL;
+}
+
+int main()
+{
+	ATM atm;
+	cout << "请输入账号密码" << endl;
+	account_list.push_back(new account(123, 456, 20));  //账号123  密码456  余额20块
+	while (!atm.sign_in());                    //循环直到登陆成功
+	cout <<"余额为"<< atm.show_money()<<endl; 
+	atm.add(5);                                  //存5块钱
+	cout <<"余额为"<< atm.show_money()<<endl;
+	atm.fetch(6);								//取6块钱
+	cout <<"余额为"<< atm.show_money()<<endl;
+	return 0;
+}
+*/
+/*#include<iostream>
+using namespace std;
+class complex {
+private:
+	float real;
+	float imaginary;
+public:
+	complex(float r=0, float i=0) :real(r), imaginary(i) {};
+	complex operator + (const complex& tem);
+	complex operator - (const complex& tem);
+	bool operator == (const complex& tem);
+	bool operator != (const complex& tem);
+	bool operator < (const complex& tem);
+	bool operator > (const complex& tem);
+	friend istream& operator>>(istream& in,complex& tem);
+	friend ostream& operator<<(ostream& out, complex& tem);
+};
+
+complex complex::operator+(const complex & tem)
+{
+	return complex(real+tem.real,imaginary+tem.imaginary);
+}
+
+complex complex::operator-(const complex & tem)
+{
+	return complex(real - tem.real, imaginary - tem.imaginary);
+}
+
+bool complex::operator==(const complex & tem)
+{
+	return real == tem.real&&imaginary == tem.imaginary;
+}
+
+bool complex::operator!=(const complex & tem)
+{
+	return real != tem.real|| imaginary != tem.imaginary;
+}
+
+bool complex::operator<(const complex & tem)
+{
+	return real*real + imaginary*imaginary < tem.real*tem.real + tem.imaginary*tem.imaginary;
+}
+
+bool complex::operator>(const complex & tem)
+{
+	return real*real + imaginary*imaginary > tem.real*tem.real + tem.imaginary*tem.imaginary;
+}
+
+istream & operator>>(istream & in, complex & tem)
+{
+	return in >> tem.real >> tem.imaginary;
+}
+
+ostream & operator<<(ostream & out, complex & tem)
+{
+	out << tem.real;
+	if (tem.imaginary > 0)
+		out << '+';
+	out << tem.imaginary <<'i'<< endl;
+	return out;
+}
+
+int main()
+{
+	complex c1(23,2), c2(-5,45), c3, c4, c5;
+	//cin >> c1 >> c2;
+	c3 = c1 + c2;
+	c4 = c1 - c2;
+	if (c3 != c4)
+	{
+		if (c3 < c4)
+		{
+			cout << "c3 is less than c4";
+			c5 = c4 - c3;
+		}
+		if (c3 > c4)
+		{
+			cout << "c3 is greater than c4";
+			c5 = c3 - c4;
+		}
+	}
+	if (c3 == c4)
+	{
+		cout << "c3 and c4 are equal";
+		c5 = c4;
+	}
+	cout << endl;
+	cout << c5;
+	return 0;
+}*/
+/*
+#include<iostream>
+using namespace std;
+inline bool isLeapYear(int year);
+int dayNum[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
+class cal_date {
+private:
+	int day;
+	int mouth;
+	int year;
+public:
+	cal_date(int d , int m , int y ) :day(d), mouth(m), year(y) {};
+	cal_date() :day(14), mouth(9), year(1752) {};
+	void inspector();
+	void mutator(const int& d, const int& m, const int& y);
+	cal_date operator+(const int& n)const;
+	int operator-(const cal_date& cal)const;
+	cal_date& operator++();
+	cal_date& operator--();
+	bool operator< (const cal_date& cal)const;
+	bool operator> (const cal_date& cal)const;
+	bool operator== (const cal_date& cal)const;
+	bool operator!= (const cal_date& cal)const;
+	friend istream& operator>> (istream& in, cal_date& cal);
+	friend ostream& operator<< (ostream& out, const cal_date& cal);
+};
+
+inline bool isLeapYear(int year)
+{
+	return year%4==0&&year%100!=0||year%400==0;
+}
+
+istream & operator>>(istream & in, cal_date & cal)
+{
+	return in >> cal.day >> cal.mouth >> cal.year;
+}
+
+ostream & operator<<(ostream & out, const cal_date & cal)
+{
+	return cout << cal.day << '/' << cal.mouth << '/' << cal.year;
+}
+
+void cal_date::inspector()
+{
+	if (isLeapYear(year))
+		dayNum[1] = 29;
+	else
+		dayNum[1] = 28;
+	if (day > 0)
+	{
+		while (day > dayNum[mouth - 1])
+		{
+			day -= dayNum[mouth - 1];
+			mouth++;
+			if (mouth > 12)
+			{
+				year++;
+				mouth = 1;
+				if (isLeapYear(year))
+					dayNum[1] = 29;
+				else
+					dayNum[1] = 28;
+			}
+		}
+	}
+	else if(day==0)
+	{
+		if (mouth == 1)
+		{
+			year--;
+			mouth = 12;
+			day = 31;
+		}
+		else
+		{
+			if (isLeapYear(year))
+				dayNum[1]=29;
+			else
+				dayNum[1]=28;
+			mouth--;
+			day = dayNum[mouth - 1];
+		}
+	}
+}
+
+void cal_date::mutator(const int & d, const int & m, const int & y)
+{
+	day = d;
+	mouth = m;
+	year = y;
+}
+
+cal_date cal_date::operator+(const int & n) const
+{
+	cal_date tem(day + n, mouth, year);
+	tem.inspector();
+	return tem;
+}
+
+int cal_date::operator-(const cal_date & cal) const
+{
+	int i;
+	cal_date tem(cal);
+	if (operator>(tem))
+	{
+		for (i = 0; operator!=(tem); i++)
+			++tem;
+	}
+	else
+	{
+		for (i = 0; operator!=(tem); i++)
+			--tem;
+	}
+	return i;
+}
+
+cal_date & cal_date::operator++()
+{
+	day++;
+	inspector();
+	return *this;
+}
+
+cal_date & cal_date::operator--()
+{
+	day--;
+	inspector();
+	return *this;
+}
+
+bool cal_date::operator<(const cal_date & cal)const
+{
+	if (year < cal.year)
+		return true;
+	else if (year > cal.year)
+		return false;
+	if (mouth < cal.mouth)
+		return true;
+	else if (mouth > cal.mouth)
+		return false;
+	if (day < cal.day)
+		return true;
+	else
+		return false;
+}
+
+bool cal_date::operator>(const cal_date & cal)const
+{
+	if (year > cal.year)
+		return true;
+	else if (year < cal.year)
+		return false;
+	if (mouth > cal.mouth)
+		return true;
+	else if (mouth < cal.mouth)
+		return false;
+	if (day > cal.day)
+		return true;
+	else
+		return false;
+}
+
+bool cal_date::operator==(const cal_date & cal)const
+{
+	return day==cal.day&&mouth==cal.mouth&&year==cal.year;
+}
+
+bool cal_date::operator!=(const cal_date & cal)const
+{
+	return day != cal.day || mouth != cal.mouth || year != cal.year;
+}
+
+int main()
+{
+	cal_date c1(11, 11, 2017);
+	cal_date c2(11, 11, 2015);
+	cout << c2 + 365 << endl;
+	for (int i = 0; i < 10; i++)
+		cout << ++c1 << endl;
+	cout << c1 - c2 << endl;
+	if (c1 > c2)
+		cout << --c2 << endl;
+	return 0;
+}*/
+/*
+#include<iostream>
+using namespace std;
+class book {
+private:
+	string ISBN;
+	string TITLE;
+	string AUTHOR;
+	string PUBLISHER;
+	double PRICE;
+public:
+	book(string i, string t, string a, string p, double pri) :ISBN(i), TITLE(t), AUTHOR(a), PUBLISHER(p), PRICE(pri) {}
+};
+class magazine :public book {
+private:
+	char FREQUENCY;
+	string EDITOR;
+public:
+	magazine(string i, string t, string a, string p, double pri, char f, string e) :book(i, t, a, p, pri), FREQUENCY(f), EDITOR(e) {}
+};
+int main()
+{
+	magazine("", "", "", "", 0, ' ', "");
+	return 0;
+}
+*/
+#include<iostream>
+using namespace std;
+class complex {
+private:
+	float real;
+	float imaginary;
+public:
+	complex(float r = 0, float i = 0) :real(r), imaginary(i) {};
+	complex operator + (const complex& tem);
+	complex operator - (const complex& tem);
+	bool operator == (const complex& tem);
+	bool operator != (const complex& tem);
+	bool operator < (const complex& tem);
+	bool operator > (const complex& tem);
+	friend istream& operator>>(istream& in, complex& tem);
+	friend ostream& operator<<(ostream& out, complex& tem);
+};
+
+complex complex::operator+(const complex & tem)
+{
+	return complex(real + tem.real, imaginary + tem.imaginary);
+}
+
+complex complex::operator-(const complex & tem)
+{
+	return complex(real - tem.real, imaginary - tem.imaginary);
+}
+
+bool complex::operator==(const complex & tem)
+{
+	return real == tem.real&&imaginary == tem.imaginary;
+}
+
+bool complex::operator!=(const complex & tem)
+{
+	return real != tem.real || imaginary != tem.imaginary;
+}
+
+bool complex::operator<(const complex & tem)
+{
+	return real*real + imaginary*imaginary < tem.real*tem.real + tem.imaginary*tem.imaginary;
+}
+
+bool complex::operator>(const complex & tem)
+{
+	return real*real + imaginary*imaginary > tem.real*tem.real + tem.imaginary*tem.imaginary;
+}
+
+istream & operator>>(istream & in, complex & tem)
+{
+	char c;
+	in >> tem.real >>c>> tem.imaginary;
+	if (c == '-')
+		tem.imaginary = -tem.imaginary;
+	in >> c;
+	return in;
+}
+
+ostream & operator<<(ostream & out, complex & tem)
+{
+	out << tem.real;
+	if (tem.imaginary > 0)
+		out << '+';
+	out << tem.imaginary << 'i';
+	return out;
+}
+
+class rational {
+private:
+	long nt;
+	long dt;
+public:
+	rational(long n=0, long d = 1) :nt(n), dt(d) { reduction(); }
+
+	bool reduction();
+	int gcd();
+	rational operator + (const rational & r);
+	rational operator + (const int & i);
+	rational operator - (const rational & r);
+	rational operator - (const int & i);
+	rational operator * (const rational & r);
+	rational operator * (const int & i);
+	rational operator / (const rational & r);
+	rational operator / (const int & i);
+	rational operator = (const rational & r);
+	friend ostream & operator << (ostream & out, const rational & r);
+	friend istream & operator >>(istream& in, rational & r);
+	friend rational operator + (const int & i,const rational & r);
+	friend rational operator - (const int & i,const rational & r);      
+	friend rational operator * (const int & i,const rational & r);
+	friend rational operator / (const int & i,const rational & r);
+
+
+	friend ostream & operator << (ostream & out, const rational & r)
+	{
+		if (r.nt < r.dt)
+			out << r.nt << '/' << r.dt;
+		else if (r.nt%r.dt == 0)
+			out << r.nt / r.dt;
+		else
+			out << r.nt / r.dt << '+' << r.nt%r.dt << '/' << r.dt;
+		return out;
+	}
+	friend istream & operator>>(istream & in, rational & r)
+	{
+		char c;
+		in >> r.nt >> c >> r.dt;
+		return in;
+	}
+	friend rational operator + (const int & i,const rational & r)					
+	{
+	return rational(r.nt+r.dt*i,r.dt);
+	}
+	friend rational operator - (const int & i,const rational & r)
+	{
+	return rational(r.dt*i-r.nt,r.dt);
+	}
+	friend rational operator * (const int & i,const rational & r)
+	{
+	return rational(r.nt*i,r.dt);
+	}
+	friend rational operator / (const int & i,const rational & r)
+	{
+	return rational(i*r.dt+r.nt);
+	}
+
+};
+int rational::gcd()
+{
+	int t, t_nt = nt, t_dt = dt;
+	if (t_nt<t_dt)
+	{
+		t = t_nt;
+		t_nt = t_dt;
+		t_dt = t;
+	}
+	while (t_dt)
+	{
+		t = t_nt%t_dt;
+		t_nt = t_dt;
+		t_dt = t;
+	}
+	return t_nt;
+}
+bool rational::reduction()
+{
+	int t = gcd();
+	nt /= t;
+	dt /= t;
+	return t != 1;
+}
+rational rational::operator + (const rational & r)
+{
+	return rational(nt*r.dt + dt*r.nt, dt*r.dt);
+}
+
+rational rational::operator + (const int & i)
+{
+	return rational(nt + dt*i, dt);
+}
+
+rational rational::operator - (const rational & r)
+{
+	return rational(nt*r.dt - dt*r.nt, dt*r.dt);
+}
+
+rational rational::operator - (const int & i)
+{
+	return rational(nt - dt*i, dt);
+}
+
+rational rational::operator * (const rational & r)
+{
+	return rational(nt*r.nt, dt*r.dt);
+}
+
+rational rational::operator * (const int & i)
+{
+	return rational(i*nt, dt);
+}
+
+rational rational::operator / (const rational & r)
+{
+	return rational(nt*r.dt, dt*r.nt);
+}
+
+rational rational::operator / (const int & i)
+{
+	return rational(nt, dt*i);
+}
+
+rational rational::operator = (const rational & r)
+{
+	return rational(nt = r.nt, dt = r.dt);
+}
+
+int main()
+{
+	int num = 0;
+	float sum = 0, count = 0;
+	rational r_sum(0,1), r_count;
+	complex c_sum, c_count;
+	cin >> num;
+	for (int i = 0; i < num; i++)
+	{
+		cin >> count;
+		sum += count;
+	}
+	cout << sum << endl;
+
+	cin >> num; 
+	for (int i = 0; i < num; i++)
+	{
+		cin >> r_count;
+		r_sum = r_sum + r_count;
+	}
+	cout << r_sum << endl;
+
+	cin >> num;
+	for (int i = 0; i < num; i++)
+	{
+		cin >> c_count;
+		c_sum = c_sum + c_count;
+	}
+	cout << c_sum << endl;
+	return 0;
+}
+/*
+#include<iostream>
+using namespace std;
+struct node {
+	int shape;
+	int num;
+	node* next;
+	node(int s, int n) :shape(s), num(n),next(NULL){}
+};
+class list
+{
+private:
+	node* next;
+public:
+	list(node* p = NULL) :next(p) {}
+	void insert(node* newNode);
+	bool Delete(node* Node);
+	node* find(int shape);
+};
+int main() 
+{
+	list L;
+	int num = 0,tem;
+	cin >> num;
+	for (int i = 0; i < num; i++)
+	{
+		cin >> tem;
+		L.insert(new node(tem,i));
+	}
+	for (int i = 0; i < 4; i++)
+	{
+		cin >> tem;
+		cout << L.find(tem)->num<<' ';
+		L.Delete(L.find(tem));
+	}
+	return 0;
+}
+
+void list::insert(node * newNode)
+{
+	if (next == NULL)
+	{
+		next = newNode;
+		return;
+	}
+	node * tail = next;
+	while (tail->next != NULL)
+		tail = tail->next;
+	tail->next = newNode;
+}
+
+bool list::Delete(node * Node)
+{
+	if (Node == NULL || next == NULL)
+		return false;
+	node * t = next;
+	if (t == Node)
+	{
+		next = t->next;
+		delete Node;
+		return true;
+	}
+	while (t != NULL)
+	{
+		if (t->next == Node)
+		{
+			t->next = t->next->next;
+			delete Node;
+			return true;
+		}
+		t = t->next;
+	}
+}
+
+node * list::find(int shape)
+{
+	node* t = next;
+	if (t == NULL)
+		return NULL;
+	while (t != NULL)
+	{
+		if (t->shape == shape)
+			return t;
+		t = t->next;
+	}
+	return NULL;
+}
+
+*/
