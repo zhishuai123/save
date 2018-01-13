@@ -1,0 +1,310 @@
+#pragma once
+#include<list>
+#include<graphics.h>
+extern IMAGE imgBg, imgMy, imgE, imgB;
+const int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;
+//const int STATIC = 0, LOW_SPEED = 1, NORMAL_SPEED = 2, HIGH_SPEED = 3;
+const int BULLET_SPEED = 8, AIRPLANE_SPEED = 1;
+struct POSITION{
+	int x;
+	int y;
+};
+struct _SIZE {
+	int width;
+	int height;
+};
+const _SIZE BACKGROUND_SIZE = { 408, 574 };
+const _SIZE BULLET_SIZE = { 7, 15 };
+const _SIZE MYPLANE_SIZE = { 63, 78 };
+const _SIZE PLANE_SIZE = { 31, 22 };
+typedef class OBJ {
+private:
+	POSITION position;
+	int direction;
+	int speed;
+	_SIZE size;
+public:
+	OBJ(POSITION pos, int dir, int spe, _SIZE siz) :position(pos), direction(dir), speed(spe), size(siz){}
+	void move();
+	void show(const IMAGE *img)const;
+	POSITION get_position()const;
+	int get_speed()const;
+	int get_direction()const;
+	_SIZE get_size()const;
+	void set_position(POSITION pos);
+	void set_direction(int dir);
+	void set_speed(int spe);
+	void set_size(_SIZE siz);
+	virtual ~OBJ() {}
+}BULLET;
+class AIRPLANE:public OBJ{
+public:
+	AIRPLANE(POSITION pos, int dir, int spe, _SIZE siz) :OBJ(pos, dir, spe, siz) {}
+	BULLET* shoot(int shoot_dir)const;
+	virtual ~AIRPLANE() {}
+};
+class MAP {
+private:
+	std::list<BULLET*> list_bullet;
+	std::list<AIRPLANE*> list_airplane;
+	AIRPLANE myairplane;
+public:
+	MAP(AIRPLANE myplane) :myairplane(myplane) {}
+	void check_collision();
+	void show()const;
+	void add_bullet(BULLET* bul);
+	void add_airplane(AIRPLANE* airp);
+	AIRPLANE & get_myairplane();
+	void move_bullet();
+	void move_plane();
+};
+
+
+
+//class.cpp
+#include"stdafx.h"
+#include"class.h"
+
+void OBJ::move()
+{
+	switch (direction)
+	{
+	case UP:
+		position.y -= speed;
+		break;
+	case DOWN:
+		position.y += speed;
+		break;
+	case LEFT:
+		position.x -= speed;
+		break;
+	case RIGHT:
+		position.x += speed;
+		break;
+	default:
+		break;
+	}
+}
+
+void OBJ::show(const IMAGE * img) const
+{
+	putimage(position.x - size.width / 2, position.y - size.height / 2, img);
+}
+
+POSITION OBJ::get_position() const
+{
+	return position;
+}
+
+int OBJ::get_speed() const
+{
+	return speed;
+}
+
+int OBJ::get_direction() const
+{
+	return direction;
+}
+
+_SIZE OBJ::get_size() const
+{
+	return size;
+}
+
+void OBJ::set_position(POSITION pos)
+{
+	position = pos;
+}
+
+void OBJ::set_direction(int dir)
+{
+	direction = dir;
+}
+
+void OBJ::set_speed(int spe)
+{
+	speed = spe;
+}
+
+void OBJ::set_size(_SIZE siz)
+{
+	size = siz;
+}
+
+BULLET * AIRPLANE::shoot(int shoot_dir) const
+{
+	POSITION tem = get_position();
+	if (shoot_dir == UP)
+		tem.y -= (BULLET_SIZE.height + MYPLANE_SIZE.height) / 2+2;
+	else if(shoot_dir==DOWN)
+		tem.y += (BULLET_SIZE.height + PLANE_SIZE.height) / 2;
+	return new BULLET(tem, shoot_dir, BULLET_SPEED, BULLET_SIZE);
+}
+
+void MAP::check_collision()
+{
+	bool tem1, tem2,tem3=false;
+	for (auto i = list_airplane.begin(); i != list_airplane.end(); i++)
+	{
+		tem1 = 2 * abs((*i)->get_position().x - myairplane.get_position().x) < MYPLANE_SIZE.width + PLANE_SIZE.width;
+		tem2 = 2 * abs((*i)->get_position().y - myairplane.get_position().y) < MYPLANE_SIZE.height + PLANE_SIZE.height;
+		if (tem1&&tem2)
+		{
+		//	delete *i;
+			list_airplane.erase(i);
+		}
+		//游戏结束  开无敌了
+		for (auto j = list_bullet.begin(); j != list_bullet.end(); j++)
+		{
+
+			tem1 = 2 * abs((*i)->get_position().x - (*j)->get_position().x) < BULLET_SIZE.width + PLANE_SIZE.width;
+			tem2 = 2 * abs((*i)->get_position().y - (*j)->get_position().y) < BULLET_SIZE.height + PLANE_SIZE.height;
+			tem3 = tem1&&tem2;
+			if (tem3)
+			{
+			//	delete *i;
+			//	delete *j;
+				list_airplane.erase(i);
+				list_bullet.erase(j);
+				break;
+			}
+		}
+		if (tem3)
+			break;
+	}
+	for (auto i = list_bullet.begin(); i != list_bullet.end(); i++)
+	{
+		tem1 = 2 * abs((*i)->get_position().x - myairplane.get_position().x) < MYPLANE_SIZE.width + PLANE_SIZE.width;
+		tem2 = 2 * abs((*i)->get_position().y - myairplane.get_position().y) < MYPLANE_SIZE.height + PLANE_SIZE.height;
+		if (tem1&&tem2)
+			;
+		//游戏结束
+	}
+	for (auto i = list_bullet.begin(); i != list_bullet.end(); i++)
+	{
+		if ((*i)->get_position().y<0 )
+		{
+		//	delete *i;
+			list_bullet.erase(i);
+			break;
+		}
+	}
+	for (auto i = list_airplane.begin(); i != list_airplane.end(); i++)
+	{
+		if ((*i)->get_position().y>BACKGROUND_SIZE.height)
+		{
+		//	delete *i;
+			list_airplane.erase(i);
+			break;
+		}
+	}
+}
+
+void MAP::show() const
+{
+	putimage(0, 0, &imgBg);
+	myairplane.show(&imgMy);
+	for (auto &a : list_airplane)
+		a->show(&imgE);
+	for (auto &b : list_bullet)
+		b->show(&imgB);
+}
+
+void MAP::add_bullet(BULLET * bul)
+{
+	list_bullet.push_back(bul);
+}
+
+void MAP::add_airplane(AIRPLANE * airp)
+{
+	list_airplane.push_back(airp);
+}
+
+AIRPLANE & MAP::get_myairplane()
+{
+	return myairplane;
+}
+
+void MAP::move_bullet()
+{
+	for (auto &a : list_bullet)
+	{
+		a->move();
+	}
+}
+
+void MAP::move_plane()
+{
+	for (auto &a : list_airplane)
+	{
+		a->move();
+	}
+}
+// airplane.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include"class.h"
+#include<process.h>
+MAP map(AIRPLANE({ BACKGROUND_SIZE.width / 2,BACKGROUND_SIZE.height - 20 }, UP, AIRPLANE_SPEED, { MYPLANE_SIZE.width, MYPLANE_SIZE.height }));
+IMAGE imgBg, imgMy, imgE, imgB;
+void __cdecl ThreadProc1(void * pParam);
+void __cdecl ThreadProc2(void * pParam);
+int flag = 0;
+int main()
+{
+	initgraph(BACKGROUND_SIZE.width, BACKGROUND_SIZE.height);
+	loadimage(&imgBg, L"bg.jpg", BACKGROUND_SIZE.width, BACKGROUND_SIZE.height);
+	loadimage(&imgMy, L"my.jpg", MYPLANE_SIZE.width, MYPLANE_SIZE.height);
+	loadimage(&imgE, L"enermy.jpg", PLANE_SIZE.width, PLANE_SIZE.height);
+	loadimage(&imgB, L"bullet.jpg",	BULLET_SIZE.width, BULLET_SIZE.height);
+
+	_beginthread(ThreadProc1, 0, 0);
+	_beginthread(ThreadProc2, 0, 0);
+	MOUSEMSG m;
+
+	while (true)
+	{
+		m = GetMouseMsg();
+		switch (m.uMsg)
+		{
+		case WM_MOUSEMOVE:
+			map.get_myairplane().set_position({ m.x,m.y });
+			break;
+		case WM_LBUTTONDOWN:
+			flag = 1;
+			map.add_bullet(map.get_myairplane().shoot(UP));
+			break;	
+		case WM_LBUTTONUP:
+			flag = 0;
+			break;
+		}
+		map.show();
+	}
+	closegraph();
+	return 0;
+}
+
+void ThreadProc1(void * pParam)
+{
+	while (true)
+	{
+		
+		map.move_plane();
+		map.move_bullet();
+		map.check_collision();
+		map.show();
+		Sleep(30);
+	}
+}
+void ThreadProc2(void * pParam)
+{
+	while (true)
+	{
+		if (flag == 1)
+			map.add_bullet(map.get_myairplane().shoot(UP));
+		map.add_airplane(new AIRPLANE({ rand() % (BACKGROUND_SIZE.width - MYPLANE_SIZE.width) + MYPLANE_SIZE.width,0 }, DOWN, BULLET_SPEED, PLANE_SIZE));
+		Sleep(500);
+	}
+}
+
