@@ -1,0 +1,284 @@
+#pragma once
+const int MAX_SIZE = 2147483647;
+template<class T>
+class Vector {
+public:
+	class Iterator {
+	private:
+		T * p;
+	public:
+		Iterator() :p(NULL) {}
+		Iterator(T * pointer) :p(pointer) {}
+		Iterator(Iterator& i) :p(i.p) {}
+		Iterator operator=(Iterator& i) { return p = i.p; }
+		Iterator operator++(int) { return p++; }
+		Iterator operator--(int) { return p--; }
+		Iterator & operator++()
+		{
+			++p;
+			return *this;
+		}
+		Iterator & operator--()
+		{
+			--p;
+			return *this;
+		}
+		Iterator operator+(const int i)const { return p + i; }
+		Iterator operator-(const int i)const { return p - i; }
+		int operator-(const Iterator& i)const { return p - i.p; }
+		T & operator*()const { return *p; }
+		bool operator!=(const Iterator & i) { return i.p != p; }
+		bool operator==(const Iterator & i) { return i.p == p; }
+	};
+	class R_iterator
+	{
+	private:
+		T * p;
+	public:
+		R_iterator() :p(NULL) {}
+		R_iterator(T * pointer) :p(pointer) {}
+		R_iterator(R_iterator& r) :p(r.p) {}
+		R_iterator operator=(R_iterator& i) { return p = i.p; }
+		R_iterator operator++(int) { return p--; }
+		R_iterator operator--(int) { return p++; }
+		R_iterator & operator++()
+		{
+			--p;
+			return *this;
+		}
+		R_iterator & operator--()
+		{
+			++p;
+			return *this;
+		}
+		R_iterator operator+(const int i) const { return p - i; }
+		R_iterator operator-(const int i) const { return p + i; }
+		int operator-(const R_iterator& i)const { return i.p - p; }
+		T & operator*()const { return *p; }
+		bool operator!=(const R_iterator & i) { return i.p != p; }
+		bool operator==(const R_iterator & i) { return i.p == p; }
+	};
+
+private:
+	T * array_p;
+	int array_lenth;
+	int _size;
+public:
+	Vector() :array_p(NULL), array_lenth(1), _size(0)
+	{
+		array_p = new T;
+	}
+	Vector(int num, const T & val = 0) :array_p(NULL), array_lenth(num), _size(num)
+	{
+		if (num < 1)
+			array_p = new T;
+		else
+			array_p = new T[num];
+		for (int i = 0; i < _size; i++)
+			array_p[i] = val;
+	}
+	Vector(const Vector & from) :array_p(NULL), array_lenth(from.array_lenth), _size(from._size)
+	{
+		array_p = new T[array_lenth];
+		for (int i = 0; i < _size; i++)
+			array_p[i] = from.array_p[i];
+	}
+	Vector(Iterator start, Iterator end)
+	{
+		array_lenth = end - start;
+		array_p = new T[array_lenth];
+		_size = array_lenth;
+		for (int i = 0; i < _size; i++)
+		{
+			array_p[i] = *start;
+			start++;
+		}
+	}
+	~Vector() { delete[] array_p; }
+	Iterator begin() { return array_p; }
+	Iterator end() { return array_p + _size; }
+	void assign(Iterator start, Iterator end)
+	{
+		if (array_lenth < end - start)
+		{
+			delete[] array_p;
+			array_lenth = end - start;
+			array_p = new T[array_lenth];
+		}
+		_size = end - start;
+		for (int i = 0; i < _size; i++)
+			array_p[i] = *(start++);
+	}
+	void assign(int num, const T &val)//
+	{
+		if (array_lenth < num)
+		{
+			delete[] array_p;
+			array_p = new T[num];
+			array_lenth = num;
+		}
+		_size = num;
+		for (int i = 0; i < num; i++)
+			array_p[i] = val;
+	}
+	int size() { return _size; }
+	bool push_back(int val)
+	{
+		if (array_lenth == _size)
+		{
+			if (array_lenth >= MAX_SIZE / 2)
+				return false;//内存不足
+
+			T * t = new T[array_lenth * 2];
+			for (int i = 0; i < _size; i++)
+				t[i] = array_p[i];
+			delete[] array_p;
+			array_p = t;
+			array_lenth *= 2;
+		}
+		array_p[_size++] = val;
+		return true;
+	}
+	void pop_back()
+	{
+		if (_size < 0)
+			;//越界了
+		array_p--;
+	}
+	T & at(int loc)
+	{
+		assert(!(loc < 0 || loc >= _size));//越界
+		return array_p[loc];
+	}
+	T & front()
+	{
+		if (_size == 0)
+			;//异常
+		return array_p[0];
+	}
+	T & back()
+	{
+		if (_size == 0)
+			;//异常
+		return array_p[_size - 1];
+	}
+	int capacity() { return array_lenth; }
+	void clear()
+	{
+		_size = 0;
+	}
+	bool empty() { return _size == 0; }
+	Iterator erase(Iterator loc)
+	{
+		for (Iterator i = loc; i != end() - 1; i++)
+			*i = *(i + 1);
+		_size--;
+		return loc;
+	}
+	Iterator erase(Iterator start, Iterator end)
+	{
+		int num = end - start;
+		for (Iterator i = start; i != Vector<T>::end() - 1 - num; i++)
+			*i = *(i + num);
+		_size -= num;
+		return start;
+	}
+	Iterator insert(Iterator loc, const T & val)
+	{
+		push_back(0);
+		for (Iterator i = end() - 1; i != loc; i--)
+			*i = *(i - 1);
+		*loc = val;
+		return loc;
+	}
+	void insert(Iterator loc, int num, const T & val)
+	{
+		int tem = loc - array_p;
+		for (int i = 0; i < num; i++)
+			push_back(0);
+		loc = begin() + tem;
+		for (Iterator i = end() - 1; i != loc + num - 1; i--)
+			*i = *(i - num);
+		for (int i = 0; i < num; i++)
+			*(loc++) = val;
+	}
+	void insert(Iterator loc, Iterator start, Iterator end)
+	{
+		int tem = loc - array_p;
+		int num = end - start;
+		for (int i = 0; i < num; i++)
+			push_back(0);
+		loc = begin() + tem;
+
+		for (Iterator i = Vector<T>::end() - 1; i != loc + num - 1; i--)
+			*i = *(i - num);
+		for (Iterator i = start; i != end; i++)
+			*(loc++) = *i;
+	}
+	int max_size() { return MAX_SIZE; }
+	R_iterator rbegin() { return p + _size - 1; }
+	R_iterator rend() { return p - 1; }
+	void reserve(int size)
+	{
+		while (size > array_lenth)
+		{
+			if (array_lenth >= MAX_SIZE / 2)
+				return false;//内存不足
+
+			T * t = new T[array_lenth * 2];
+			for (int i = 0; i < _size; i++)
+				t[i] = array_p[i];
+			delete[] array_p;
+			array_p = t;
+			array_lenth *= 2;
+		}
+	}
+	void resize(int size, const T & val)
+	{
+		if (array_lenth < num)
+		{
+			delete[] array_p;
+			array_p = new T[num];
+			array_lenth = num;
+		}
+		_size = num;
+		for (int i = 0; i < _size; i++)
+			array_p[i] = val;
+	}
+	T & operator[](int i)
+	{
+		return array_p[i];
+	}
+	bool operator==(const Vector<T> & t)
+	{
+		if (_size != t.size())
+			return false;
+		for (int i = 0; i < _size; i++)
+			if (operator[i] != t[i])
+				return false;
+		return true;
+	}
+	bool operator<(const Vector<T> & t)
+	{
+		int count = size() > t.size() ? t.size() : size();
+		for (int i = 0; i < count; i++)
+			if (array_p[i] > t[i])
+				return false;
+			else if (array_p[i] < t[i])
+				return true;
+		if (size() < t.size())
+			return true;
+		return false;
+	}
+	bool operator!=(const Vector<T> & t) { return !operator==(t); }
+	bool operator>(const Vector<T> & t) { return !(operator<(t) || operator==(t)); }
+	bool operator>=(const Vector<T> & t) { return !operator<(t); }
+	bool operator<=(const Vector<T> & t) { return !operator>(t); }
+	void swap(Vector<T> & from)
+	{
+		std::swap(array_p, from.array_p);
+		std::swap(array_lenth, from.array_lenth);
+		std::swap(_size, from._size);
+	}
+
+};
